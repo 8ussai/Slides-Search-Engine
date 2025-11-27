@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IR Slides Search</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<header>
+    <h1>📚 IR Slides Search</h1>
+    <p>Semantic search over Stanford IR slides using TF-IDF and Transformer embeddings</p>
+</header>
+
+<main>
+    <div class="search-card">
+        <form method="POST">
+            <div>
+                <label for="query">Query</label>
+                <input
+                    id="query"
+                    type="text"
+                    name="query"
+                    value="{{ query }}"
+                    placeholder="Inter Query"
+                    autocomplete="on"
+                >
+            </div>
+
+            <div class="mode-row">
+                <label>Search mode</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="mode" value="tfidf" {% if mode == 'tfidf' %}checked{% endif %}>
+                        TF-IDF
+                    </label>
+                    <label>
+                        <input type="radio" name="mode" value="emb" {% if mode == 'emb' %}checked{% endif %}>
+                        Embeddings
+                    </label>
+                    <label>
+                        <input type="radio" name="mode" value="both" {% if mode == 'both' %}checked{% endif %}>
+                        Both
+                    </label>
+                    <label class="topk-label">
+                        Top-K:
+                        <input type="number" name="top_k" min="1" max="20" value="{{ top_k }}">
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit">Search 🔍</button>
+        </form>
+    </div>
+
+    <div class="results-container">
+        {% if mode in ['tfidf', 'both'] %}
+        <div class="results-column">
+            <h2>TF-IDF Results</h2>
+            {% if results_tfidf %}
+                {% for r in results_tfidf %}
+                    <div class="result-item">
+                        <div class="result-item-title">
+                            <a href="{{ url_for('serve_slide', filename=r.doc_id + '.pdf') }}#page={{ r.page_number }}" target="_blank">
+                                {{ r.doc_id }} — Page {{ r.page_number }}
+                            </a>
+                        </div>
+                        <div class="score">
+                            Score: {{ "%.4f"|format(r.score) }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-results">No results.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if mode in ['emb', 'both'] %}
+        <div class="results-column">
+            <h2>Embeddings Results</h2>
+            {% if results_emb %}
+                {% for r in results_emb %}
+                    <div class="result-item">
+                        <div class="result-item-title">
+                            <a href="{{ url_for('serve_slide', filename=r.doc_id + '.pdf') }}#page={{ r.page_number }}" target="_blank">
+                                {{ r.doc_id }} — Page {{ r.page_number }}
+                            </a>
+                        </div>
+                        <div class="score">
+                            Score: {{ "%.4f"|format(r.score) }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-results">No results.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</main>
+</body>
+</html>

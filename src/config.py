@@ -18,6 +18,9 @@ EMBEDDINGS_DIR: Path = MODELS_DIR / "embeddings"
 EMBEDDINGS_NPY_PATH: Path = EMBEDDINGS_DIR / "embeddings.npy"
 EMBEDDINGS_METADATA_PATH: Path = EMBEDDINGS_DIR / "metadata.pkl"
 
+TEMPLATES_DIR: Path = PROJECT_ROOT / "templates"
+STATIC_DIR: Path = PROJECT_ROOT / "static"
+
 SENTENCE_TRANSFORMER_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
 
 TFIDF_MAX_FEATURES: int = 20000
@@ -41,6 +44,8 @@ def ensure_directories() -> None:
         MODELS_DIR,
         TFIDF_DIR,
         EMBEDDINGS_DIR,
+        TEMPLATES_DIR,
+        STATIC_DIR
     ]:
         directory.mkdir(parents=True, exist_ok=True)
 
