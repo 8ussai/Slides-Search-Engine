@@ -2,7 +2,7 @@ import pickle
 import re
 
 import numpy as np
-import pandas as pd\
+import pandas as pd
 
 from typing import List, Dict
 from sentence_transformers import SentenceTransformer

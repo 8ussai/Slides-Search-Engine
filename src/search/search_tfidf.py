@@ -7,7 +7,7 @@ import pandas as pd
 from typing import List, Dict
 from sklearn.metrics.pairwise import linear_kernel
 
-from src.config import (SLIDES_CORPUS_CSV, TFIDF_VECTORIZER_PATH, TFIDF_MATRIX_PATH, DEFAULT_TOP_K, LOWERCASE_TEXT, REMOVE_PUNCTUATION, REMOVE_NUMBERS,)
+from src.config import (SLIDES_CORPUS_CSV, TFIDF_VECTORIZER_PATH, TFIDF_MATRIX_PATH, DEFAULT_TOP_K, LOWERCASE_TEXT, REMOVE_PUNCTUATION, REMOVE_NUMBERS)
 
 def clean_text(text: str) -> str:
     if LOWERCASE_TEXT:
