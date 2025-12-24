@@ -7,7 +7,7 @@ import pandas as pd
 from typing import List, Dict
 from sklearn.metrics.pairwise import linear_kernel
 
-from src.config import (SLIDES_CORPUS_CSV, TFIDF_VECTORIZER_PATH, TFIDF_MATRIX_PATH, DEFAULT_TOP_K, LOWERCASE_TEXT, REMOVE_PUNCTUATION, REMOVE_NUMBERS)
+from src.config import (SLIDES_CORPUS_CSV, TFIDF_VECTORIZER_PATH, TFIDF_MATRIX_PATH, DEFAULT_TOP_K, MIN_COSINE_SIMILARITY, LOWERCASE_TEXT, REMOVE_PUNCTUATION, REMOVE_NUMBERS,)
 
 def clean_text(text: str) -> str:
     if LOWERCASE_TEXT:
@@ -42,9 +42,15 @@ def search_tfidf(query: str, top_k: int = DEFAULT_TOP_K,) -> List[Dict]:
     if top_k <= 0:
         top_k = DEFAULT_TOP_K
 
-    top_indices = np.argsort(cosine_similarities)[::-1][:top_k]
+    valid_indices = np.where(cosine_similarities >= MIN_COSINE_SIMILARITY)[0]
+    
+    if len(valid_indices) == 0:
+        return []
+    
+    sorted_valid_indices = valid_indices[np.argsort(cosine_similarities[valid_indices])[::-1]]
+    top_indices = sorted_valid_indices[:top_k]
+    
     results = []
-
     for rank, idx in enumerate(top_indices, start=1):
         row = df.iloc[idx]
         score = float(cosine_similarities[idx])

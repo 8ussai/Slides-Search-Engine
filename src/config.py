@@ -30,7 +30,7 @@ TFIDF_MAX_DF: float = 0.9
 
 DEFAULT_TOP_K: int = 5
 
-MIN_COSINE_SIMILARITY: float = 0.0
+MIN_COSINE_SIMILARITY: float = 0.1
 
 LOWERCASE_TEXT: bool = True
 REMOVE_PUNCTUATION: bool = True
